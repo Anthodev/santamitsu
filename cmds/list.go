@@ -13,26 +13,26 @@ func List() []*discordgo.ApplicationCommand {
 	dmPermission := true
 
 	return []*discordgo.ApplicationCommand{
-		{
-			Name:        "ping",
-			Description: "Ping the bot",
-		},
-		{
-			Name:         "dmping",
-			Description:  "Ping the bot with a response in a dm",
-			GuildID:      gid,
-			DMPermission: &dmPermission,
-		},
 		//{
 		//	Name:        "info",
 		//	Description: "Get info about the current santa secret if one is running",
 		//	GuildID:     *env.GuildID,
 		//},
 		{
+			Name:        "announce",
+			Description: "Announce the santa secret",
+			GuildID:     gid,
+		},
+		{
 			Name:         "setup",
 			Description:  "Setup a new santa secret",
 			GuildID:      gid,
 			DMPermission: &dmPermission,
+		},
+		{
+			Name:        "cancel",
+			Description: "Cancel a santa secret",
+			GuildID:     gid,
 		},
 		//{
 		//	Name:        "join",

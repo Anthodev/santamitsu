@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"anthodev/santamitsu/utils"
+	"anthodev/santamitsu/utils/response"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 )
 
 func pingResponse(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	utils.SendInteractionResponse(s, i, "Pong!", false)
+	response.SendInteractionResponse(s, i, "Pong!", false)
 }
 
 func dmPingResponse(s *discordgo.Session, i *discordgo.InteractionCreate) {
@@ -45,5 +45,5 @@ func dmPingResponse(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		)
 	}
 
-	utils.SendInteractionResponse(s, i, "Check your DMs!", true)
+	response.SendInteractionResponse(s, i, "Check your DMs!", true)
 }

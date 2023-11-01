@@ -1,37 +1,31 @@
 package handlers
 
 import (
-	"anthodev/santamitsu/common/component"
-	"anthodev/santamitsu/utils"
+	"anthodev/santamitsu/db"
+	"anthodev/santamitsu/model"
+	"anthodev/santamitsu/utils/component"
+	"anthodev/santamitsu/utils/response"
 	"github.com/bwmarrin/discordgo"
-	"strconv"
 )
 
-type dm struct {
-	ChannelID   string
-	UserID      string
-	Title       string
-	Description string
-	MaxPrice    int
-}
-
 var (
-	responses map[string]dm = map[string]dm{}
+	responses = map[string]model.SetupSettings{}
 )
 
 func setupHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	uc := utils.CreateDmChannel(s, i.Member.User.ID)
+	uc := response.CreateDmChannel(s, i.Member.User.ID)
 
 	setupWizard(s, i, uc)
 }
 
 func setupWizard(s *discordgo.Session, i *discordgo.InteractionCreate, uc *discordgo.Channel) {
-	delete(responses, uc.ID)
+	delete(responses, i.GuildID)
 
-	if _, ok := responses[uc.ID]; !ok {
-		responses[uc.ID] = dm{
-			ChannelID: uc.ID,
+	if _, ok := responses[i.GuildID]; !ok {
+		responses[i.GuildID] = model.SetupSettings{
+			ChannelID: i.GuildID,
 			UserID:    i.Member.User.ID,
+			State:     1,
 		}
 
 		askTitle(s, i, uc)
@@ -39,75 +33,83 @@ func setupWizard(s *discordgo.Session, i *discordgo.InteractionCreate, uc *disco
 }
 
 func askTitle(s *discordgo.Session, i *discordgo.InteractionCreate, uc *discordgo.Channel) {
-	embed := component.NewEmbed()
-	embed.Title = "Secret Santa Setup"
-	embed.Description = "Give a title to your secret santa!"
+	embed := component.NewGenericEmbed(
+		"Secret Santa Setup",
+		"Give a title to your secret santa",
+	)
 
-	utils.SendDmEmbed(s, uc.ID, embed.MessageEmbed)
+	response.SendDmEmbed(s, uc.ID, embed)
 
 	s.AddHandlerOnce(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		contentMsgHandler(s, m)
+		contentMsgHandler(s, i, m)
 
 		if m.Content != "" {
-			response := responses[uc.ID]
-			response.Title = m.Content
+			r := responses[i.GuildID]
+			r.Title = m.Content
 
-			askDescription(uc, s)
+			askDescription(uc, s, i, r)
 		}
 	})
 }
 
-func askDescription(uc *discordgo.Channel, s *discordgo.Session) {
-	embed := component.NewEmbed()
-	embed.Title = "Secret Santa Description"
-	embed.Description = "Give a description to your secret santa!"
+func askDescription(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.InteractionCreate, r model.SetupSettings) {
+	embed := component.NewGenericEmbed(
+		"Description",
+		"Give a description to your secret santa",
+	)
 
-	utils.SendDmEmbed(s, uc.ID, embed.MessageEmbed)
+	response.SendDmEmbed(s, uc.ID, embed)
 
 	s.AddHandlerOnce(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		contentMsgHandler(s, m)
+		contentMsgHandler(s, i, m)
 
 		if m.Content != "" {
-			response := responses[uc.ID]
-			response.Description = m.Content
+			r.Description = m.Content
 
-			askPrice(uc, s)
+			askPrice(uc, s, i, r)
 		}
 	})
 }
 
-//
-func askPrice(uc *discordgo.Channel, s *discordgo.Session) {
-	embed := component.NewEmbed()
-	embed.Title = "Secret Santa Description"
-	embed.Description = "Give a description to your secret santa!"
+func askPrice(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.InteractionCreate, r model.SetupSettings) {
+	embed := component.NewGenericEmbed(
+		"Price",
+		"Indicate the maximum price for a gift",
+	)
 
-	utils.SendDmEmbed(s, uc.ID, embed.MessageEmbed)
+	response.SendDmEmbed(s, uc.ID, embed)
 
 	s.AddHandlerOnce(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		contentMsgHandler(s, m)
+		contentMsgHandler(s, i, m)
 
 		if m.Content != "" {
-			response := responses[uc.ID]
+			r.MaxPrice = m.Content
+			responses[i.GuildID] = r
 
-			price, err := strconv.Atoi(m.Content)
-			if err != nil {
-				askPrice(uc, s)
-			}
+			ss := model.CreateSantaSecret(r)
+			db.InsertSantaSecret(ss)
+			completedWizard(uc, s)
 
-			response.MaxPrice = price
-
-			askPrice(uc, s)
+			delete(responses, i.GuildID)
 		}
 	})
 }
 
-func contentMsgHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
+func completedWizard(uc *discordgo.Channel, s *discordgo.Session) {
+	embed := component.NewGenericEmbed(
+		"Completed",
+		"Your secret santa has been created!",
+	)
+
+	response.SendDmEmbed(s, uc.ID, embed)
+}
+
+func contentMsgHandler(s *discordgo.Session, i *discordgo.InteractionCreate, m *discordgo.MessageCreate) {
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 
-	if m.ChannelID == responses[m.ChannelID].ChannelID {
+	if i.ChannelID != responses[i.ChannelID].ChannelID {
 		return
 	}
 }

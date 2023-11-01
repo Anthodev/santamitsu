@@ -46,6 +46,7 @@ func Run() {
 
 	s.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
 		fmt.Printf("Logged in as %v#%v", s.State.User.Username, s.State.User.Discriminator)
+		fmt.Println("")
 	})
 
 	err := s.Open()
@@ -89,6 +90,7 @@ func removeCmds(registeredCommands []*discordgo.ApplicationCommand) {
 	gid := os.Getenv("DISCORD_GUILD")
 
 	if rmEnvBool {
+		fmt.Println("")
 		fmt.Println("Removing the commands...")
 		for _, v := range registeredCommands {
 			err := s.ApplicationCommandDelete(s.State.User.ID, gid, v.ID)

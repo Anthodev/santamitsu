@@ -31,7 +31,7 @@ func JoinHandler(
 
 	response.SendInteractionResponse(s, i, "You have joined the secret santa!", true)
 
-	if isMsg {
+	if isMsg == true {
 		response.UpdateEmbedParticipantList(s, i, ss)
 	}
 }

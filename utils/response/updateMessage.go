@@ -9,15 +9,19 @@ func UpdateEmbedParticipantList(s *discordgo.Session, i *discordgo.InteractionCr
 	msgEmbeds := i.Message.Embeds
 	me := msgEmbeds[0]
 
+	var fields []*discordgo.MessageEmbedField
+
 	for _, p := range ss.Participants {
 		m, _ := s.GuildMember(i.GuildID, p.UserId)
 
-		me.Fields = append(me.Fields, &discordgo.MessageEmbedField{
+		fields = append(fields, &discordgo.MessageEmbedField{
 			Name:   m.Nick,
 			Value:  m.Mention(),
 			Inline: false,
 		})
 	}
+
+	me.Fields = fields
 
 	UpdateInteractionEmbedResponse(s, i, msgEmbeds)
 }

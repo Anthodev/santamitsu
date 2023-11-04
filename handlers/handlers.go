@@ -71,7 +71,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			CancelHandler(s, i)
 		},
 		"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-			if i.Type != discordgo.InteractionMessageComponent {
+			if i.Type != discordgo.InteractionApplicationCommand {
 				return
 			}
 
@@ -98,7 +98,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			LeaveHandler(s, i, ss)
+			LeaveHandler(s, i, ss, false)
 		},
 	}
 }
@@ -119,6 +119,21 @@ func Buttons() map[string]func(s *discordgo.Session, i *discordgo.InteractionCre
 			}
 
 			JoinHandler(s, i, ss, true)
+		},
+		"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			if i.Type != discordgo.InteractionMessageComponent {
+				return
+			}
+
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			LeaveHandler(s, i, ss, true)
 		},
 	}
 }

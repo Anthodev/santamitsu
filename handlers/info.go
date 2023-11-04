@@ -9,7 +9,7 @@ import (
 
 func InfoHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SantaSecret) {
 	embed := &discordgo.MessageEmbed{
-		Title:       "Secret Santa " + ss.Title,
+		Title:       "Secret Santa: " + ss.Title,
 		Description: ss.Description + "\n\nMaximum budget per participant:\n" + ss.MaxPrice + ss.Currency + "\n\nParticipants:\n\n",
 	}
 
@@ -26,7 +26,7 @@ func InfoHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.
 		})
 	}
 
-	ar := component.JoinActionRow()
+	ar := component.JoinLeaveActionRow()
 
 	ird := response.BuildInteractionEmbedResponseData(
 		0,

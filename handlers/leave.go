@@ -7,7 +7,12 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func LeaveHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SantaSecret) {
+func LeaveHandler(
+	s *discordgo.Session,
+	i *discordgo.InteractionCreate,
+	ss model.SantaSecret,
+	isMsg bool,
+) {
 	var u model.SantaParticipant
 
 	for _, p := range ss.Participants {
@@ -27,4 +32,8 @@ func LeaveHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model
 	db.UpdateSantaSecret(ss)
 
 	response.SendInteractionResponse(s, i, "You have left the secret santa!", true)
+
+	if isMsg == true {
+		response.UpdateEmbedParticipantList(s, i, ss)
+	}
 }

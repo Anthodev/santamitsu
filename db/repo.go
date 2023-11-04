@@ -41,31 +41,27 @@ func FindOneSantaSecret(channelID string) model.SantaSecret {
 	return s
 }
 
-func UpdateSantaSecret(s *model.SantaSecret) {
+func UpdateSantaSecret(s model.SantaSecret) model.SantaSecret {
 	c := GetCollection()
 
-	filter := bson.M{"channel_id": s.ChannelID}
+	filter := bson.M{"channelid": s.ChannelID}
 
-	var updatedSantaSecret bson.M
-
-	doc := bson.M{
-		"title":          s.Title,
-		"description":    s.Description,
-		"max_price":      s.MaxPrice,
-		"participants":   s.Participants,
-		"excluded_pairs": s.ExcludedPairs,
+	update := bson.M{
+		"$set": s,
 	}
 
-	err := c.collection.FindOneAndUpdate(context.TODO(), filter, doc).Decode(&updatedSantaSecret)
+	err := c.collection.FindOneAndUpdate(context.TODO(), filter, update).Decode(&s)
 
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return
+			return s
 		}
 		log.Fatal(err)
 	}
 
 	defer disconnect(c.client)
+
+	return s
 }
 
 func DeleteOneSantaSecret(channelID string) {

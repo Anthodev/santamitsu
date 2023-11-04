@@ -120,6 +120,7 @@ func askCurrency(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.Inter
 
 			if err != nil {
 				askCurrency(uc, s, i, r)
+				return
 			}
 
 			r.Currency = convertCurrency(content)

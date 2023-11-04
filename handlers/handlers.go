@@ -3,7 +3,6 @@ package handlers
 import (
 	"anthodev/santamitsu/db"
 	"anthodev/santamitsu/utils/response"
-	"fmt"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -31,11 +30,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			fmt.Println(i.GuildID)
-
 			ss := db.FindOneSantaSecret(i.GuildID)
-
-			fmt.Println(ss)
 
 			if ss.Title == "" {
 				response.SendInteractionResponse(s, i, "You don't have any secret santa running!", true)
@@ -59,6 +54,56 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			}
 
 			CancelHandler(s, i)
+		},
+		"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			if i.Type != discordgo.InteractionMessageComponent {
+				return
+			}
+
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			JoinHandler(s, i, ss, false)
+		},
+		"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			if i.Type != discordgo.InteractionApplicationCommand {
+				return
+			}
+
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			LeaveHandler(s, i, ss)
+		},
+	}
+}
+
+func Buttons() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	return map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
+		"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			if i.Type != discordgo.InteractionMessageComponent {
+				return
+			}
+
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			JoinHandler(s, i, ss, true)
 		},
 	}
 }

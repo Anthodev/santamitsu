@@ -39,11 +39,11 @@ func List() []*discordgo.ApplicationCommand {
 		//	Description: "Join the current santa secret",
 		//	GuildID:     *env.GuildID,
 		//},
-		//{
-		//	Name:        "leave",
-		//	Description: "Leave the current santa secret",
-		//	GuildID:     *env.GuildID,
-		//},
+		{
+			Name:        "leave",
+			Description: "Leave the current santa secret",
+			GuildID:     gid,
+		},
 		//{
 		//	Name:        "lock",
 		//	Description: "Lock and start the current santa secret",

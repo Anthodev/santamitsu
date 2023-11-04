@@ -9,7 +9,7 @@ import (
 func AnnounceHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SantaSecret) {
 	embed := &discordgo.MessageEmbed{
 		Title:       "Launch of the Secret Santa " + ss.Title + "!",
-		Description: ss.Description + "\n\nMaximum budget per participant: " + ss.MaxPrice + ss.Currency + "\n\nParticipants:",
+		Description: ss.Description + "\n\nMaximum budget per participant:\n" + ss.MaxPrice + ss.Currency + "\n\nParticipants:\n\n",
 	}
 
 	for _, p := range ss.Participants {

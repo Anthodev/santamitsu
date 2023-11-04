@@ -32,3 +32,20 @@ func CreateSantaSecret(s SetupSettings) SantaSecret {
 		ExcludedPairs: []ExcludedPair{},
 	}
 }
+
+func AddParticipant(s SantaSecret, p SantaParticipant) SantaSecret {
+	s.Participants = append(s.Participants, p)
+
+	return s
+}
+
+func RemoveParticipant(s SantaSecret, p SantaParticipant) SantaSecret {
+	for i, v := range s.Participants {
+		if v.UserId == p.UserId {
+			s.Participants = append(s.Participants[:i], s.Participants[i+1:]...)
+			break
+		}
+	}
+
+	return s
+}

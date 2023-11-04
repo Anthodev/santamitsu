@@ -1,6 +1,7 @@
 package response
 
 import (
+	"fmt"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -72,6 +73,20 @@ func BuildInteractionResponseData(
 		Flags:      f,
 		Components: cmp,
 		TTS:        false,
+	}
+}
+
+func UpdateInteractionEmbedResponse(
+	s *discordgo.Session,
+	i *discordgo.InteractionCreate,
+	e []*discordgo.MessageEmbed,
+) {
+	_, err := s.FollowupMessageEdit(i.Interaction, i.Message.ID, &discordgo.WebhookEdit{
+		Embeds: &e,
+	})
+
+	if err != nil {
+		fmt.Println(err)
 	}
 }
 

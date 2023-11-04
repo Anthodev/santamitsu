@@ -20,6 +20,7 @@ var (
 
 	c = cmds.List()
 	h = handlers.List()
+	m = handlers.Buttons()
 )
 
 func init() {
@@ -35,6 +36,10 @@ func init() {
 		switch i.Type {
 		case discordgo.InteractionApplicationCommand:
 			if h, ok := h[i.ApplicationCommandData().Name]; ok {
+				h(s, i)
+			}
+		case discordgo.InteractionMessageComponent:
+			if h, ok := m[i.MessageComponentData().CustomID]; ok {
 				h(s, i)
 			}
 		}

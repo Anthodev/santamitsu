@@ -24,7 +24,7 @@ func InsertSantaSecret(s model.SantaSecret) {
 func FindOneSantaSecret(channelID string) model.SantaSecret {
 	c := GetCollection()
 
-	filter := bson.M{"channel_id": channelID}
+	filter := bson.M{"channelid": channelID}
 
 	var s model.SantaSecret
 
@@ -71,7 +71,7 @@ func UpdateSantaSecret(s *model.SantaSecret) {
 func DeleteOneSantaSecret(channelID string) {
 	c := GetCollection()
 
-	filter := bson.M{"channel_id": channelID}
+	filter := bson.M{"channelid": channelID}
 
 	_, err := c.collection.DeleteOne(context.TODO(), filter)
 

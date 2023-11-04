@@ -14,6 +14,7 @@ type SantaSecret struct {
 	Title         string
 	Description   string
 	MaxPrice      string
+	Currency      string
 	State         int
 	Participants  []SantaParticipant
 	ExcludedPairs []ExcludedPair
@@ -25,6 +26,7 @@ func CreateSantaSecret(s SetupSettings) SantaSecret {
 		Title:         s.Title,
 		Description:   s.Description,
 		MaxPrice:      s.MaxPrice,
+		Currency:      s.Currency,
 		State:         s.State,
 		Participants:  []SantaParticipant{},
 		ExcludedPairs: []ExcludedPair{},

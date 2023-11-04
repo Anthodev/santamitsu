@@ -1,11 +1,15 @@
 package response
 
 import (
-	"fmt"
 	"github.com/bwmarrin/discordgo"
 )
 
-func SendInteractionResponse(s *discordgo.Session, i *discordgo.InteractionCreate, content string, ephemeral bool) {
+func SendInteractionResponse(
+	s *discordgo.Session,
+	i *discordgo.InteractionCreate,
+	content string,
+	ephemeral bool,
+) {
 	ird := &discordgo.InteractionResponseData{
 		Content: content,
 		TTS:     false,
@@ -21,26 +25,65 @@ func SendInteractionResponse(s *discordgo.Session, i *discordgo.InteractionCreat
 	})
 }
 
-func SendFollowupMessage(s *discordgo.Session, i *discordgo.InteractionCreate, content string) *discordgo.Message {
-	msg, err := s.FollowupMessageCreate(i.Interaction, true, &discordgo.WebhookParams{
+func SendInteractionEmbedResponse(
+	s *discordgo.Session,
+	i *discordgo.InteractionCreate,
+	content string,
+	embed *discordgo.MessageEmbed,
+) {
+	ird := &discordgo.InteractionResponseData{
 		Content: content,
-	})
-
-	if err != nil {
-		fmt.Println("error creating a followup message", err)
+		Embeds:  []*discordgo.MessageEmbed{embed},
+		TTS:     false,
 	}
 
-	return msg
+	_ = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: ird,
+	})
 }
 
-func SendFollowupEmbedMessage(s *discordgo.Session, i *discordgo.InteractionCreate, embed *discordgo.MessageEmbed) *discordgo.Message {
-	msg, err := s.FollowupMessageCreate(i.Interaction, true, &discordgo.WebhookParams{
-		Embeds: []*discordgo.MessageEmbed{embed},
+func SendInteractionEmbedResponseWithActionRow(
+	s *discordgo.Session,
+	i *discordgo.InteractionCreate,
+	ird *discordgo.InteractionResponseData,
+) {
+	_ = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: ird,
 	})
+}
 
-	if err != nil {
-		fmt.Println("error creating a followup message", err)
+func BuildComponent(ar *discordgo.ActionsRow) []discordgo.MessageComponent {
+	return []discordgo.MessageComponent{
+		ar,
 	}
+}
 
-	return msg
+func BuildInteractionResponseData(
+	t string,
+	c string,
+	f discordgo.MessageFlags,
+	cmp []discordgo.MessageComponent,
+) *discordgo.InteractionResponseData {
+	return &discordgo.InteractionResponseData{
+		Title:      t,
+		Content:    c,
+		Flags:      f,
+		Components: cmp,
+		TTS:        false,
+	}
+}
+
+func BuildInteractionEmbedResponseData(
+	f discordgo.MessageFlags,
+	e *discordgo.MessageEmbed,
+	cmp []discordgo.MessageComponent,
+) *discordgo.InteractionResponseData {
+	return &discordgo.InteractionResponseData{
+		Flags:      f,
+		Embeds:     []*discordgo.MessageEmbed{e},
+		Components: cmp,
+		TTS:        false,
+	}
 }

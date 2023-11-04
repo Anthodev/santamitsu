@@ -5,7 +5,9 @@ import (
 	"anthodev/santamitsu/model"
 	"anthodev/santamitsu/utils/component"
 	"anthodev/santamitsu/utils/response"
+	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"strconv"
 )
 
 var (
@@ -84,6 +86,43 @@ func askPrice(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.Interact
 
 		if m.Content != "" {
 			r.MaxPrice = m.Content
+
+			askCurrency(uc, s, i, r)
+		}
+	})
+}
+
+func askCurrency(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.InteractionCreate, r model.SetupSettings) {
+	embed := component.NewGenericEmbed(
+		"Currency",
+		"Indicate the currency of the price",
+	)
+
+	currencies := model.BuildCurrencies()
+
+	for _, v := range currencies {
+		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+			Name:   fmt.Sprintf("`%v`: ", v.Id),
+			Value:  fmt.Sprintf("%v", v.Value),
+			Inline: true,
+		})
+	}
+
+	response.SendDmEmbed(s, uc.ID, embed)
+
+	s.AddHandlerOnce(func(s *discordgo.Session, m *discordgo.MessageCreate) {
+		contentMsgHandler(s, i, m)
+
+		if m.Content != "" {
+			content := m.Content
+
+			_, err := strconv.Atoi(content)
+
+			if err != nil {
+				askCurrency(uc, s, i, r)
+			}
+
+			r.Currency = convertCurrency(content)
 			responses[i.GuildID] = r
 
 			ss := model.CreateSantaSecret(r)
@@ -95,10 +134,21 @@ func askPrice(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.Interact
 	})
 }
 
+func convertCurrency(currency string) string {
+	switch currency {
+	case "1":
+		return "€"
+	case "2":
+		return "$"
+	default:
+		return ""
+	}
+}
+
 func completedWizard(uc *discordgo.Channel, s *discordgo.Session) {
 	embed := component.NewGenericEmbed(
 		"Completed",
-		"Your secret santa has been created!",
+		"Your secret santa has been created! Use `/announce` on your server to announce it!",
 	)
 
 	response.SendDmEmbed(s, uc.ID, embed)

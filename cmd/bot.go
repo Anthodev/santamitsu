@@ -63,7 +63,6 @@ func Run() {
 		cmd, err := s.ApplicationCommandCreate(s.State.User.ID, gid, v)
 		if err != nil {
 			log.Fatalf("Error creating command '%v': %v", v.Name, err)
-			//panic(err)
 		}
 		registeredCommands[i] = cmd
 	}
@@ -72,7 +71,6 @@ func Run() {
 		err := s.Close()
 		if err != nil {
 			log.Fatalf("Error closing Discord session: %v", err)
-			//panic(err)
 		}
 	}(s)
 

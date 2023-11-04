@@ -6,5 +6,6 @@ type SetupSettings struct {
 	Title       string
 	Description string
 	MaxPrice    string
+	Currency    string
 	State       int
 }

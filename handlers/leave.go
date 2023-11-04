@@ -18,6 +18,7 @@ func LeaveHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model
 	}
 
 	if u.UserId == "" {
+		response.SendInteractionResponse(s, i, "You have not joined the secret santa!", true)
 		return
 	}
 

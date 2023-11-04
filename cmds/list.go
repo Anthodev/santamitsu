@@ -13,11 +13,11 @@ func List() []*discordgo.ApplicationCommand {
 	dmPermission := true
 
 	return []*discordgo.ApplicationCommand{
-		//{
-		//	Name:        "info",
-		//	Description: "Get info about the current santa secret if one is running",
-		//	GuildID:     *env.GuildID,
-		//},
+		{
+			Name:        "info",
+			Description: "Get info about the current santa secret if one is running",
+			GuildID:     gid,
+		},
 		{
 			Name:        "announce",
 			Description: "Announce the santa secret",

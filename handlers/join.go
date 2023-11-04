@@ -17,6 +17,14 @@ func JoinHandler(
 		UserId: i.Member.User.ID,
 	}
 
+	for _, p := range ss.Participants {
+		if p.UserId == i.Member.User.ID {
+			response.SendInteractionResponse(s, i, "You have already joined the secret santa!", true)
+
+			return
+		}
+	}
+
 	ss = model.AddParticipant(ss, p)
 
 	db.UpdateSantaSecret(ss)

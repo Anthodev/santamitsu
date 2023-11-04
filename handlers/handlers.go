@@ -25,6 +25,21 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 
 			setupHandler(s, i)
 		},
+		"info": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			if i.Type != discordgo.InteractionApplicationCommand {
+				return
+			}
+
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "You don't have any secret santa running!", true)
+
+				return
+			}
+
+			InfoHandler(s, i, ss)
+		},
 		"announce": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			if i.Type != discordgo.InteractionApplicationCommand {
 				return

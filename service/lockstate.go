@@ -7,7 +7,7 @@ import (
 )
 
 func isLocked(
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) bool {
 	if ss.State == 0 {
 		return true
@@ -19,7 +19,7 @@ func isLocked(
 func LockState(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	if isLocked(ss) {
 		response.SendInteractionResponse(s, i, "You can't perform this action, the Secret Santa is locked.", true)

@@ -8,10 +8,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func JoinHandler(
+func joinHandler(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	isMsg bool,
 ) {
 	service.LockState(s, i, ss)

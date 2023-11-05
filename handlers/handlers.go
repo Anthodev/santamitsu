@@ -39,7 +39,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			InfoHandler(s, i, ss)
+			infoHandler(s, i, ss)
 		},
 		"announce": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			if i.Type != discordgo.InteractionApplicationCommand {
@@ -54,7 +54,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			AnnounceHandler(s, i, ss)
+			announceHandler(s, i, ss)
 		},
 		"cancel": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			if i.Type != discordgo.InteractionApplicationCommand {
@@ -71,7 +71,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 
 			service.IsMemberAuthorized(s, i, ss)
 
-			CancelHandler(s, i)
+			cancelHandler(s, i)
 		},
 		"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			if i.Type != discordgo.InteractionApplicationCommand {
@@ -86,7 +86,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			JoinHandler(s, i, ss, false)
+			joinHandler(s, i, ss, false)
 		},
 		"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			if i.Type != discordgo.InteractionApplicationCommand {
@@ -101,7 +101,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			LeaveHandler(s, i, ss, false)
+			leaveHandler(s, i, ss, false)
 		},
 		"exclude": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			ss := db.FindOneSantaSecret(i.GuildID)
@@ -112,7 +112,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			ExcludeHandler(s, i, ss)
+			excludeHandler(s, i, ss)
 		},
 		"moderator-role": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			ss := db.FindOneSantaSecret(i.GuildID)
@@ -123,7 +123,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			ModeratorRoleHandler(s, i, ss)
+			moderatorRoleHandler(s, i, ss)
 		},
 		"lock": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			ss := db.FindOneSantaSecret(i.GuildID)
@@ -134,7 +134,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			LockHandler(s, i, ss)
+			lockHandler(s, i, ss)
 		},
 		"unlock": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			ss := db.FindOneSantaSecret(i.GuildID)
@@ -145,7 +145,40 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
-			UnlockHandler(s, i, ss)
+			unlockHandler(s, i, ss)
+		},
+		"draw": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			drawHandler(s, i, ss)
+		},
+		"get-pair": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			getPairHandler(s, i, ss)
+		},
+		"delete": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title != "" {
+				response.SendInteractionResponse(s, i, "You already have a secret santa running!", true)
+
+				return
+			}
+
+			deleteHandler(s, i)
 		},
 	}
 }
@@ -165,7 +198,7 @@ func Buttons() map[string]func(s *discordgo.Session, i *discordgo.InteractionCre
 				return
 			}
 
-			JoinHandler(s, i, ss, true)
+			joinHandler(s, i, ss, true)
 		},
 		"leave": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			if i.Type != discordgo.InteractionMessageComponent {
@@ -180,7 +213,7 @@ func Buttons() map[string]func(s *discordgo.Session, i *discordgo.InteractionCre
 				return
 			}
 
-			LeaveHandler(s, i, ss, true)
+			leaveHandler(s, i, ss, true)
 		},
 	}
 }

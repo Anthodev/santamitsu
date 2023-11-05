@@ -9,7 +9,7 @@ import (
 func isMemberAuthorizedCheck(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) bool {
 	m, _ := s.GuildMember(i.GuildID, i.Member.User.ID)
 
@@ -47,7 +47,7 @@ func isAdminCheck(
 func IsMemberAuthorized(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	if isMemberAuthorizedCheck(s, i, ss) == false {
 		response.SendInteractionResponse(s, i, "You are not authorized to do this.", true)

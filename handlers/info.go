@@ -7,7 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func InfoHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SantaSecret) {
+func infoHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
 	embed := &discordgo.MessageEmbed{
 		Title:       "Secret Santa: " + ss.Title,
 		Description: ss.Description + "\n\nMaximum budget per participant:\n" + ss.MaxPrice + ss.Currency + "\n\nParticipants:\n\n",

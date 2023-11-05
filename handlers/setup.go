@@ -129,7 +129,7 @@ func askCurrency(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.Inter
 			r.Currency = convertCurrency(content)
 			responses[i.GuildID] = r
 
-			ss := model.CreateSantaSecret(r)
+			ss := model.CreateSecretSanta(r)
 			db.InsertSantaSecret(ss)
 			completedWizard(uc, s)
 

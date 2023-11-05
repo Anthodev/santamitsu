@@ -9,7 +9,7 @@ import (
 	"log"
 )
 
-func InsertSantaSecret(s model.SantaSecret) {
+func InsertSantaSecret(s model.SecretSanta) {
 	c := GetCollection()
 
 	_, err := c.collection.InsertOne(context.TODO(), s)
@@ -21,12 +21,12 @@ func InsertSantaSecret(s model.SantaSecret) {
 	defer disconnect(c.client)
 }
 
-func FindOneSantaSecret(channelID string) model.SantaSecret {
+func FindOneSantaSecret(channelID string) model.SecretSanta {
 	c := GetCollection()
 
 	filter := bson.M{"channelid": channelID}
 
-	var s model.SantaSecret
+	var s model.SecretSanta
 
 	err := c.collection.FindOne(context.TODO(), filter).Decode(&s)
 
@@ -41,7 +41,7 @@ func FindOneSantaSecret(channelID string) model.SantaSecret {
 	return s
 }
 
-func UpdateSantaSecret(s model.SantaSecret) model.SantaSecret {
+func UpdateSantaSecret(s model.SecretSanta) model.SecretSanta {
 	c := GetCollection()
 
 	filter := bson.M{"channelid": s.ChannelID}

@@ -177,5 +177,20 @@ func List() []*discordgo.ApplicationCommand {
 			Description: "Unlock the current santa secret",
 			GuildID:     gid,
 		},
+		{
+			Name:        "draw",
+			Description: "Draw the pairs for the current santa secret",
+			GuildID:     gid,
+		},
+		{
+			Name:        "get-pair",
+			Description: "Get your match for the santa secret",
+			GuildID:     gid,
+		},
+		{
+			Name:        "delete",
+			Description: "Delete the santa secret",
+			GuildID:     gid,
+		},
 	}
 }

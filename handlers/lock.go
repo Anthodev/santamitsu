@@ -7,10 +7,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func LockHandler(
+func lockHandler(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	ss.State = 0
 
@@ -19,10 +19,10 @@ func LockHandler(
 	response.SendInteractionResponse(s, i, "Your secret santa has been locked", true)
 }
 
-func UnlockHandler(
+func unlockHandler(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	ss.State = 1
 

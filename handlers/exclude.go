@@ -10,10 +10,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ExcludeHandler(
+func excludeHandler(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	service.IsMemberAuthorized(s, i, ss)
 
@@ -111,7 +111,7 @@ func ExcludeHandler(
 func excludeUser(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	u *discordgo.User,
 ) {
 	for _, p := range ss.ExcludedMembers {
@@ -132,7 +132,7 @@ func excludeUser(
 func excludePair(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	u1 *discordgo.User,
 	u2 *discordgo.User,
 ) {
@@ -154,7 +154,7 @@ func excludePair(
 func removeExcludedMember(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	u *discordgo.User,
 ) {
 	for _, e := range ss.ExcludedMembers {
@@ -173,7 +173,7 @@ func removeExcludedMember(
 func removeExcludedPair(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	u1 *discordgo.User,
 	u2 *discordgo.User,
 ) {
@@ -193,7 +193,7 @@ func removeExcludedPair(
 func listExcludedMembers(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	embed := component.NewGenericEmbed(fmt.Sprintf("Secret Santa \"%s\" - Exclusion list", ss.Title), "List of excluded members and pairs for the secret santa")
 	embed.Description += "\n\n"

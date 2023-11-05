@@ -5,7 +5,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func UpdateEmbedParticipantList(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SantaSecret) {
+func UpdateEmbedParticipantList(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
 	msgEmbeds := i.Message.Embeds
 	me := msgEmbeds[0]
 

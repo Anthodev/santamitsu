@@ -8,10 +8,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func LeaveHandler(
+func leaveHandler(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	isMsg bool,
 ) {
 	service.LockState(s, i, ss)

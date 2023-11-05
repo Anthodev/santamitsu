@@ -17,7 +17,12 @@ type ModeratorRole struct {
 	RoleId string
 }
 
-type SantaSecret struct {
+type MatchedPair struct {
+	UserId1 string
+	UserId2 string
+}
+
+type SecretSanta struct {
 	ChannelID       string
 	Title           string
 	Description     string
@@ -28,10 +33,11 @@ type SantaSecret struct {
 	ExcludedPairs   []ExcludedPair
 	ExcludedMembers []ExcludedMember
 	ModeratorRoles  []ModeratorRole
+	MatchedPairs    []MatchedPair
 }
 
-func CreateSantaSecret(s SetupSettings) SantaSecret {
-	return SantaSecret{
+func CreateSecretSanta(s SetupSettings) SecretSanta {
+	return SecretSanta{
 		ChannelID:       s.ChannelID,
 		Title:           s.Title,
 		Description:     s.Description,
@@ -42,16 +48,17 @@ func CreateSantaSecret(s SetupSettings) SantaSecret {
 		ExcludedPairs:   []ExcludedPair{},
 		ExcludedMembers: []ExcludedMember{},
 		ModeratorRoles:  []ModeratorRole{},
+		MatchedPairs:    []MatchedPair{},
 	}
 }
 
-func AddParticipant(s SantaSecret, p SantaParticipant) SantaSecret {
+func AddParticipant(s SecretSanta, p SantaParticipant) SecretSanta {
 	s.Participants = append(s.Participants, p)
 
 	return s
 }
 
-func RemoveParticipant(s SantaSecret, p SantaParticipant) SantaSecret {
+func RemoveParticipant(s SecretSanta, p SantaParticipant) SecretSanta {
 	for i, v := range s.Participants {
 		if v.UserId == p.UserId {
 			s.Participants = append(s.Participants[:i], s.Participants[i+1:]...)
@@ -62,19 +69,19 @@ func RemoveParticipant(s SantaSecret, p SantaParticipant) SantaSecret {
 	return s
 }
 
-func AddExcludedMember(s SantaSecret, p ExcludedMember) SantaSecret {
+func AddExcludedMember(s SecretSanta, p ExcludedMember) SecretSanta {
 	s.ExcludedMembers = append(s.ExcludedMembers, p)
 
 	return s
 }
 
-func AddExcludedPair(s SantaSecret, p ExcludedPair) SantaSecret {
+func AddExcludedPair(s SecretSanta, p ExcludedPair) SecretSanta {
 	s.ExcludedPairs = append(s.ExcludedPairs, p)
 
 	return s
 }
 
-func RemoveExcludedMember(s SantaSecret, p ExcludedMember) SantaSecret {
+func RemoveExcludedMember(s SecretSanta, p ExcludedMember) SecretSanta {
 	for i, v := range s.ExcludedMembers {
 		if v.UserId == p.UserId {
 			s.ExcludedMembers = append(s.ExcludedMembers[:i], s.ExcludedMembers[i+1:]...)
@@ -85,7 +92,7 @@ func RemoveExcludedMember(s SantaSecret, p ExcludedMember) SantaSecret {
 	return s
 }
 
-func RemoveExcludedPair(s SantaSecret, p ExcludedPair) SantaSecret {
+func RemoveExcludedPair(s SecretSanta, p ExcludedPair) SecretSanta {
 	for i, v := range s.ExcludedPairs {
 		if v.UserId1 == p.UserId1 && v.UserId2 == p.UserId2 {
 			s.ExcludedPairs = append(s.ExcludedPairs[:i], s.ExcludedPairs[i+1:]...)
@@ -96,19 +103,25 @@ func RemoveExcludedPair(s SantaSecret, p ExcludedPair) SantaSecret {
 	return s
 }
 
-func AddModeratorRole(s SantaSecret, r ModeratorRole) SantaSecret {
+func AddModeratorRole(s SecretSanta, r ModeratorRole) SecretSanta {
 	s.ModeratorRoles = append(s.ModeratorRoles, r)
 
 	return s
 }
 
-func RemoveModeratorRole(s SantaSecret, r ModeratorRole) SantaSecret {
+func RemoveModeratorRole(s SecretSanta, r ModeratorRole) SecretSanta {
 	for i, v := range s.ModeratorRoles {
 		if v.RoleId == r.RoleId {
 			s.ModeratorRoles = append(s.ModeratorRoles[:i], s.ModeratorRoles[i+1:]...)
 			break
 		}
 	}
+
+	return s
+}
+
+func AddMatchedPair(s SecretSanta, p MatchedPair) SecretSanta {
+	s.MatchedPairs = append(s.MatchedPairs, p)
 
 	return s
 }

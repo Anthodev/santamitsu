@@ -7,10 +7,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func cancelHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+func deleteHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	service.IsAdmin(s, i)
-	
+
 	db.DeleteOneSantaSecret(i.GuildID)
 
-	response.SendInteractionResponse(s, i, "Your secret santa has been cancelled", true)
+	response.SendInteractionResponse(s, i, "Your secret santa has been deleted", true)
 }

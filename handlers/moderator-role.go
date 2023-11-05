@@ -10,10 +10,10 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func ModeratorRoleHandler(
+func moderatorRoleHandler(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	service.IsAdmin(s, i)
 
@@ -66,7 +66,7 @@ func ModeratorRoleHandler(
 func addRole(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	r *discordgo.Role,
 ) {
 	mr := model.ModeratorRole{
@@ -83,7 +83,7 @@ func addRole(
 func removeRole(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 	r *discordgo.Role,
 ) {
 	for _, mr := range ss.ModeratorRoles {
@@ -101,7 +101,7 @@ func removeRole(
 func listRoles(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	ss model.SantaSecret,
+	ss model.SecretSanta,
 ) {
 	embed := component.NewGenericEmbed(fmt.Sprintf("Moderator roles of %s", ss.Title), "List of the roles that can manage the secret santa")
 	embed.Description += "\n\n"

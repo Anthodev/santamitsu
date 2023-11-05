@@ -8,7 +8,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func AnnounceHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SantaSecret) {
+func announceHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
 	service.LockState(s, i, ss)
 	service.IsMemberAuthorized(s, i, ss)
 

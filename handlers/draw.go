@@ -25,6 +25,12 @@ func drawHandler(
 		return
 	}
 
+	if len(ss.Participants) < 2 {
+		response.SendInteractionResponse(s, i, "You need at least 3 participants to draw the Secret Santa!", true)
+
+		return
+	}
+
 	var matchedUsers []string
 
 	for _, p := range ss.Participants {

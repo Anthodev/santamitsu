@@ -29,13 +29,16 @@ func SendInteractionResponse(
 func SendInteractionEmbedResponse(
 	s *discordgo.Session,
 	i *discordgo.InteractionCreate,
-	content string,
 	embed *discordgo.MessageEmbed,
+	ephemeral bool,
 ) {
 	ird := &discordgo.InteractionResponseData{
-		Content: content,
-		Embeds:  []*discordgo.MessageEmbed{embed},
-		TTS:     false,
+		Embeds: []*discordgo.MessageEmbed{embed},
+		TTS:    false,
+	}
+
+	if ephemeral {
+		ird.Flags = discordgo.MessageFlagsEphemeral
 	}
 
 	_ = s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{

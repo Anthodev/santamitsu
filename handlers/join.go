@@ -3,6 +3,7 @@ package handlers
 import (
 	"anthodev/santamitsu/db"
 	"anthodev/santamitsu/model"
+	"anthodev/santamitsu/service"
 	"anthodev/santamitsu/utils/response"
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,6 +14,14 @@ func JoinHandler(
 	ss model.SantaSecret,
 	isMsg bool,
 ) {
+	service.LockState(s, i, ss)
+
+	if service.CheckUserIsExcluded(ss, i.Member.User.ID) {
+		response.SendInteractionResponse(s, i, "You can't participate in this Secret Santa, please contact a moderator or an admin.", true)
+
+		return
+	}
+
 	p := model.SantaParticipant{
 		UserId: i.Member.User.ID,
 	}

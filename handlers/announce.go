@@ -2,12 +2,16 @@ package handlers
 
 import (
 	"anthodev/santamitsu/model"
+	"anthodev/santamitsu/service"
 	"anthodev/santamitsu/utils/component"
 	"anthodev/santamitsu/utils/response"
 	"github.com/bwmarrin/discordgo"
 )
 
 func AnnounceHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SantaSecret) {
+	service.LockState(s, i, ss)
+	service.IsMemberAuthorized(s, i, ss)
+
 	embed := &discordgo.MessageEmbed{
 		Title:       "Launch of the Secret Santa " + ss.Title + "!",
 		Description: ss.Description + "\n\nMaximum budget per participant:\n" + ss.MaxPrice + ss.Currency + "\n\nParticipants:\n\n",

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"anthodev/santamitsu/db"
+	"anthodev/santamitsu/service"
 	"anthodev/santamitsu/utils/response"
 	"github.com/bwmarrin/discordgo"
 )
@@ -68,6 +69,8 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 				return
 			}
 
+			service.IsMemberAuthorized(s, i, ss)
+
 			CancelHandler(s, i)
 		},
 		"join": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
@@ -99,6 +102,50 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			}
 
 			LeaveHandler(s, i, ss, false)
+		},
+		"exclude": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			ExcludeHandler(s, i, ss)
+		},
+		"moderator-role": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			ModeratorRoleHandler(s, i, ss)
+		},
+		"lock": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			LockHandler(s, i, ss)
+		},
+		"unlock": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			UnlockHandler(s, i, ss)
 		},
 	}
 }

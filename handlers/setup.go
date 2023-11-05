@@ -3,6 +3,7 @@ package handlers
 import (
 	"anthodev/santamitsu/db"
 	"anthodev/santamitsu/model"
+	"anthodev/santamitsu/service"
 	"anthodev/santamitsu/utils/component"
 	"anthodev/santamitsu/utils/response"
 	"fmt"
@@ -15,6 +16,8 @@ var (
 )
 
 func setupHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	service.IsAdmin(s, i)
+
 	uc := response.CreateDmChannel(s, i.Member.User.ID)
 
 	setupWizard(s, i, uc)

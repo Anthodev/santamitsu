@@ -3,6 +3,7 @@ package handlers
 import (
 	"anthodev/santamitsu/db"
 	"anthodev/santamitsu/model"
+	"anthodev/santamitsu/service"
 	"anthodev/santamitsu/utils/response"
 	"github.com/bwmarrin/discordgo"
 )
@@ -13,6 +14,14 @@ func LeaveHandler(
 	ss model.SantaSecret,
 	isMsg bool,
 ) {
+	service.LockState(s, i, ss)
+
+	if ss.State == 0 {
+		response.SendInteractionResponse(s, i, "You can't leave the Secret Santa once locked", true)
+
+		return
+	}
+
 	var u model.SantaParticipant
 
 	for _, p := range ss.Participants {

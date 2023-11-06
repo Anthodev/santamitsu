@@ -36,6 +36,12 @@ func drawHandler(
 	for _, p := range ss.Participants {
 		matchingList := getMatchingList(p.UserId, matchedUsers, ss)
 
+		if len(matchingList) == 0 {
+			response.SendInteractionResponse(s, i, "There is no matching for the Secret Santa!", true)
+
+			return
+		}
+
 		randomIndex := rand.Intn(len(matchingList))
 		randomParticipant := matchingList[randomIndex]
 		matchedPair := model.MatchedPair{

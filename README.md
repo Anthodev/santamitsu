@@ -15,6 +15,7 @@ Golang Discord Bot to create a Secret Santa
 - `/exclude remove` - Remove the exclusion for a member
 - `/exclude remove-pair` - Remove the exclusion for a pair
 - `/exclude list` - List the exclusions
+- `/draw` - Draw and announce the pairs for the Secret Santa once it's locked
 
 ### For the server admin
 - `/setup` - Setup the Secret Santa via DM
@@ -23,7 +24,6 @@ Golang Discord Bot to create a Secret Santa
 - `/delete` - Delete the Secret Santa
 - `/lock` - Lock the participation for the Secret Santa
 - `/unlock` - Unlock the participation for the Secret Santa
-- `/draw` - Draw and announce the pairs for the Secret Santa once it's locked
 - `/moderator-role add-role` - Add a role to the list of moderator roles for the Secret Santa
 - `/moderator-role remove-role` - Remove a role from the list of moderator roles for the Secret Santa
 - `/moderator-role list-roles` - List the moderator roles for the Secret Santa

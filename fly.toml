@@ -1,27 +1,40 @@
-# fly.toml app configuration file generated for santamitsu on 2023-11-06T19:26:13+01:00
+# fly.toml app configuration file generated for santamitsu on 2023-11-06T20:19:00+01:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "fly-builder-frosty-snow-9789"
+app = "santamitsu"
 primary_region = "ams"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
 
-[build]
-  builder = "paketobuildpacks/builder:base"
-  buildpacks = ["gcr.io/paketo-buildpacks/go"]
-
-[processes]
-  worker = "go run main.go"
+#[build]
+#  builder = "paketobuildpacks/builder:base"
+#  buildpacks = ["gcr.io/paketo-buildpacks/go"]
 
 [[services]]
-  internal_port = 8080
   protocol = "tcp"
+  internal_port = 8080
+  auto_stop_machines = false
   auto_start_machines = true
-  auto_stop_machines = false  # prevent automatic suspension
-  min_machines_running = 1  # keep a machine running at all times
-  processes = ["worker"]
+  min_machines_running = 1
 
-[mounts]
-  source="machine_data"  # mount the current directory
-  destination="/app"  # to the /app directory in the VM
-  process="worker"  # only for the worker process
+  [[services.ports]]
+  port = 80
+  handlers = ["http"]
+  force_https = true
+
+  [[services.ports]]
+  port = 443
+  handlers = ["tls", "http"]
+
+  [services.concurrency]
+  type = "connections"
+  hard_limit = 25
+  soft_limit = 20
+
+  [[services.tcp_checks]]
+  interval = "15s"
+  timeout = "2s"
+  grace_period = "1s"
+  restart_limit = 0

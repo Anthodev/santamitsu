@@ -9,7 +9,7 @@ Golang Discord Bot to create a Secret Santa
 - `/leave` - Leave the Secret Santa
 - `/get-pair` - Get your match once the Secret Santa is drawn
 
-### For the moderators
+### For designated moderators
 - `/exclude member` - Exclude a member from the Secret Santa
 - `/exclude pair` - Prevent a match between two members
 - `/exclude remove` - Remove the exclusion for a member
@@ -18,7 +18,7 @@ Golang Discord Bot to create a Secret Santa
 - `/draw` - Draw and announce the pairs for the Secret Santa once it's locked
 
 ### For the server admin
-- `/setup` - Setup the Secret Santa via DM
+- `/setup` - Setup the Secret Santa
 - `/announce` - Announce the Secret Santa to the members on the servers
 - `/cancel` - Cancel the Secret Santa
 - `/delete` - Delete the Secret Santa

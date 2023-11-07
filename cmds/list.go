@@ -192,5 +192,9 @@ func List() []*discordgo.ApplicationCommand {
 			Description: "Delete the santa secret",
 			GuildID:     gid,
 		},
+		{
+			Name:        "help",
+			Description: "Get help about the bot",
+		},
 	}
 }

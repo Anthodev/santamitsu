@@ -18,6 +18,8 @@ kill_timeout = "5s"
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 1
+  http_checks = []
+  tcp_checks = []
 
   [[services.ports]]
   port = 80
@@ -32,9 +34,3 @@ kill_timeout = "5s"
   type = "connections"
   hard_limit = 25
   soft_limit = 20
-
-  [[services.tcp_checks]]
-  interval = "15s"
-  timeout = "2s"
-  grace_period = "1s"
-  restart_limit = 0

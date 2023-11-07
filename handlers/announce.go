@@ -30,7 +30,7 @@ func announceHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss mo
 		})
 	}
 
-	ar := component.JoinActionRow()
+	ar := component.JoinLeaveActionRow()
 
 	ird := response.BuildInteractionEmbedResponseData(
 		0,

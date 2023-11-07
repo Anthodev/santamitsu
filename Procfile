@@ -1,1 +1,0 @@
-worker: nohup go run main.go &

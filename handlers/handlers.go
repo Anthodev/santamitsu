@@ -17,7 +17,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			ss := db.FindOneSantaSecret(i.GuildID)
 
 			if ss.Title != "" {
-				response.SendInteractionResponse(s, i, "You already have a secret santa running!", true)
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
 
 				return
 			}
@@ -34,7 +34,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			ss := db.FindOneSantaSecret(i.GuildID)
 
 			if ss.Title == "" {
-				response.SendInteractionResponse(s, i, "You don't have any secret santa running!", true)
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
 
 				return
 			}
@@ -49,7 +49,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			ss := db.FindOneSantaSecret(i.GuildID)
 
 			if ss.Title == "" {
-				response.SendInteractionResponse(s, i, "You don't have any secret santa running!", true)
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
 
 				return
 			}
@@ -64,7 +64,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			ss := db.FindOneSantaSecret(i.GuildID)
 
 			if ss.Title == "" {
-				response.SendInteractionResponse(s, i, "You don't have any secret santa running!", true)
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
 
 				return
 			}
@@ -172,13 +172,16 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 		"delete": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			ss := db.FindOneSantaSecret(i.GuildID)
 
-			if ss.Title != "" {
-				response.SendInteractionResponse(s, i, "You already have a secret santa running!", true)
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
 
 				return
 			}
 
 			deleteHandler(s, i)
+		},
+		"help": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			helpHandler(s, i)
 		},
 	}
 }

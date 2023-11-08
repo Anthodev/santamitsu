@@ -13,10 +13,17 @@ import (
 func setBudgetHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
 	service.IsMemberAuthorized(s, i, ss)
 
+	embed := component.NewGenericEmbed(
+		fmt.Sprintf("\"**%s**\" - Budget modification", ss.Title),
+		"Check your DMs to set the budget for your secret santa!",
+	)
+
+	response.SendInteractionEmbedResponse(s, i, embed, true)
+
 	uc := response.CreateDmChannel(s, i.Member.User.ID)
 
-	embed := component.NewGenericEmbed(
-		fmt.Sprintf("\"**%s**\" modification - Budget", ss.Title),
+	embed = component.NewGenericEmbed(
+		fmt.Sprintf("\"**%s**\" - Budget modification", ss.Title),
 		"What is the new maximum budget per participant?",
 	)
 
@@ -30,14 +37,14 @@ func setBudgetHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss m
 
 			ss.MaxPrice = content
 
-			db.UpdateSantaSecret(ss)
+			ss = db.UpdateSantaSecret(ss)
 
 			embed := component.NewGenericEmbed(
-				fmt.Sprintf("\"**%s**\" modification - Budget", ss.Title),
+				fmt.Sprintf("\"**%s**\" - Budget modification", ss.Title),
 				fmt.Sprintf("The budget has been updated to **%s%s**", ss.MaxPrice, ss.Currency),
 			)
 
-			response.SendInteractionEmbedResponse(s, i, embed, true)
+			response.SendDmEmbed(s, uc.ID, embed)
 		}
 	})
 }

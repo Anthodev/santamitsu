@@ -193,6 +193,11 @@ func List() []*discordgo.ApplicationCommand {
 			GuildID:     gid,
 		},
 		{
+			Name:        "set-budget",
+			Description: "Set the budget for the santa secret",
+			GuildID:     gid,
+		},
+		{
 			Name:        "help",
 			Description: "Get help about the bot",
 		},

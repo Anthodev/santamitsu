@@ -17,7 +17,7 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			ss := db.FindOneSantaSecret(i.GuildID)
 
 			if ss.Title != "" {
-				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+				response.SendInteractionResponse(s, i, "A Secret Santa is already active!", true)
 
 				return
 			}
@@ -179,6 +179,21 @@ func List() map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate
 			}
 
 			deleteHandler(s, i)
+		},
+		"set-budget": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			if i.Type != discordgo.InteractionApplicationCommand {
+				return
+			}
+
+			ss := db.FindOneSantaSecret(i.GuildID)
+
+			if ss.Title == "" {
+				response.SendInteractionResponse(s, i, "No Secret Santa is active!", true)
+
+				return
+			}
+
+			setBudgetHandler(s, i, ss)
 		},
 		"help": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			helpHandler(s, i)

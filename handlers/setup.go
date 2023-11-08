@@ -129,6 +129,21 @@ func askCurrency(uc *discordgo.Channel, s *discordgo.Session, i *discordgo.Inter
 			r.Currency = convertCurrency(content)
 			responses[i.GuildID] = r
 
+			if isSecretSantaAlreadyExisting(i) {
+				embed := component.NewGenericEmbed(
+					"Secret Santa already existing",
+					"A Secret Santa has been created while you setup one!",
+				)
+				response.SendDmEmbed(s, i.Member.User.ID, embed)
+
+				embed = component.NewGenericEmbed(
+					"Secret Santa already existing",
+					"You can announce it with `/announce`",
+				)
+				response.SendInteractionEmbedResponse(s, i, embed, true)
+				return
+			}
+
 			ss := model.CreateSecretSanta(r)
 			db.InsertSantaSecret(ss)
 			completedWizard(uc, s)
@@ -166,4 +181,14 @@ func contentMsgHandler(s *discordgo.Session, i *discordgo.InteractionCreate, m *
 	if i.ChannelID != responses[i.ChannelID].ChannelID {
 		return
 	}
+}
+
+func isSecretSantaAlreadyExisting(i *discordgo.InteractionCreate) bool {
+	ss := db.FindOneSantaSecret(i.GuildID)
+
+	if ss.Title != "" {
+		return true
+	}
+
+	return false
 }

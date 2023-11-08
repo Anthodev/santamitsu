@@ -26,7 +26,7 @@ func setBudgetHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss m
 }
 
 func setBudget(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
-	ss.MaxPrice = i.ApplicationCommandData().Options[0].StringValue()
+	ss.MaxPrice = i.ApplicationCommandData().Options[0].Options[0].StringValue()
 
 	ss = db.UpdateSantaSecret(ss)
 

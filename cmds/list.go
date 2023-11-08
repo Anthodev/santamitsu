@@ -15,38 +15,38 @@ func List() []*discordgo.ApplicationCommand {
 	return []*discordgo.ApplicationCommand{
 		{
 			Name:        "info",
-			Description: "Get info about the current santa secret if one is running",
+			Description: "Get info about the current Secret Santa if one is running",
 			GuildID:     gid,
 		},
 		{
 			Name:        "announce",
-			Description: "Announce the santa secret",
+			Description: "Announce the Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:         "setup",
-			Description:  "Setup a new santa secret",
+			Description:  "Setup a new Secret Santa",
 			GuildID:      gid,
 			DMPermission: &dmPermission,
 		},
 		{
 			Name:        "cancel",
-			Description: "Cancel a santa secret",
+			Description: "Cancel a Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "join",
-			Description: "Join the current santa secret",
+			Description: "Join the current Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "leave",
-			Description: "Leave the current santa secret",
+			Description: "Leave the current Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "exclude",
-			Description: "Exclude a member from the current santa secret",
+			Description: "Exclude a member from the current Secret Santa",
 			GuildID:     gid,
 			Type:        discordgo.ChatApplicationCommand,
 			Options: []*discordgo.ApplicationCommandOption{
@@ -129,12 +129,12 @@ func List() []*discordgo.ApplicationCommand {
 		},
 		{
 			Name:        "moderator-role",
-			Description: "Add a moderator role to the santa secret",
+			Description: "Add a moderator role to the Secret Santa",
 			GuildID:     gid,
 			Options: []*discordgo.ApplicationCommandOption{
 				{
 					Name:        "add-role",
-					Description: "Add a moderator role to the santa secret",
+					Description: "Add a moderator role to the Secret Santa",
 					Type:        discordgo.ApplicationCommandOptionSubCommand,
 					Options: []*discordgo.ApplicationCommandOption{
 						{
@@ -148,7 +148,7 @@ func List() []*discordgo.ApplicationCommand {
 				},
 				{
 					Name:        "remove-role",
-					Description: "Remove a moderator role from the santa secret",
+					Description: "Remove a moderator role from the Secret Santa",
 					Type:        discordgo.ApplicationCommandOptionSubCommand,
 					Options: []*discordgo.ApplicationCommandOption{
 						{
@@ -162,40 +162,48 @@ func List() []*discordgo.ApplicationCommand {
 				},
 				{
 					Name:        "list-roles",
-					Description: "List all moderator roles for the santa secret",
+					Description: "List all moderator roles for the Secret Santa",
 					Type:        discordgo.ApplicationCommandOptionSubCommand,
 				},
 			},
 		},
 		{
 			Name:        "lock",
-			Description: "Lock the current santa secret",
+			Description: "Lock the current Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "unlock",
-			Description: "Unlock the current santa secret",
+			Description: "Unlock the current Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "draw",
-			Description: "Draw the pairs for the current santa secret",
+			Description: "Draw the pairs for the current Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "get-pair",
-			Description: "Get your match for the santa secret",
+			Description: "Get your match for the Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "delete",
-			Description: "Delete the santa secret",
+			Description: "Delete the Secret Santa",
 			GuildID:     gid,
 		},
 		{
 			Name:        "set-budget",
-			Description: "Set the budget for the santa secret",
+			Description: "Set the budget for the Secret Santa",
 			GuildID:     gid,
+			Options: []*discordgo.ApplicationCommandOption{
+				{
+					Name:        "maximum-price",
+					Description: "Set the new maximum budget for the Secret Santa",
+					Type:        discordgo.ApplicationCommandOptionString,
+					Required:    true,
+				},
+			},
 		},
 		{
 			Name:        "help",

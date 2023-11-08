@@ -26,13 +26,15 @@ func setBudgetHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss m
 }
 
 func setBudget(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
-	ss.MaxPrice = i.ApplicationCommandData().Options[0].StringValue()
+	nmp := i.ApplicationCommandData().Options[0].StringValue()
+	
+	ss.MaxPrice = nmp
 
 	ss = db.UpdateSantaSecret(ss)
 
 	embed := component.NewGenericEmbed(
 		fmt.Sprintf("\"**%s**\" - Budget modification", ss.Title),
-		fmt.Sprintf("The budget has been updated to **%s%s**", ss.MaxPrice, ss.Currency),
+		fmt.Sprintf("The budget has been updated to **%s%s**", nmp, ss.Currency),
 	)
 
 	response.SendInteractionEmbedResponse(s, i, embed, true)

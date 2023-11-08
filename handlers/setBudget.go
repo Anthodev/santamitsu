@@ -13,38 +13,27 @@ import (
 func setBudgetHandler(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
 	service.IsMemberAuthorized(s, i, ss)
 
+	switch i.Type {
+	case discordgo.InteractionApplicationCommand:
+		data := i.ApplicationCommandData()
+		subcmd := data.Options[0]
+
+		if subcmd.Name == "maximum-price" {
+			setBudget(s, i, ss)
+			return
+		}
+	}
+}
+
+func setBudget(s *discordgo.Session, i *discordgo.InteractionCreate, ss model.SecretSanta) {
+	ss.MaxPrice = i.ApplicationCommandData().Options[0].StringValue()
+
+	ss = db.UpdateSantaSecret(ss)
+
 	embed := component.NewGenericEmbed(
 		fmt.Sprintf("\"**%s**\" - Budget modification", ss.Title),
-		"Check your DMs to set the budget for your secret santa!",
+		fmt.Sprintf("The budget has been updated to **%s%s**", ss.MaxPrice, ss.Currency),
 	)
 
 	response.SendInteractionEmbedResponse(s, i, embed, true)
-
-	uc := response.CreateDmChannel(s, i.Member.User.ID)
-
-	embed = component.NewGenericEmbed(
-		fmt.Sprintf("\"**%s**\" - Budget modification", ss.Title),
-		"What is the new maximum budget per participant?",
-	)
-
-	response.SendDmEmbed(s, uc.ID, embed)
-
-	s.AddHandlerOnce(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		contentMsgHandler(s, i, m)
-
-		if m.Content != "" {
-			content := m.Content
-
-			ss.MaxPrice = content
-
-			ss = db.UpdateSantaSecret(ss)
-
-			embed := component.NewGenericEmbed(
-				fmt.Sprintf("\"**%s**\" - Budget modification", ss.Title),
-				fmt.Sprintf("The budget has been updated to **%s%s**", ss.MaxPrice, ss.Currency),
-			)
-
-			response.SendDmEmbed(s, uc.ID, embed)
-		}
-	})
 }
